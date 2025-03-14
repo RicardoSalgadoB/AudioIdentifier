@@ -1,5 +1,5 @@
-#include "Preprocessing/MP3_Reader.h"
-#include "HopfieldNetwork/SongClassifier.h"
+#include "MP3_Reader.h"
+#include "AudioIdentifier.h"
 #include <vector>
 #include <cmath>
 #include <string>
