@@ -5,5 +5,5 @@ main: main.cpp
 	g++ main.cpp -o main -std=c++14 $(FFT_FLAGS) $(MPG123_FLAGS)
 
 clean:
-	rm main_test
+	rm main
 
