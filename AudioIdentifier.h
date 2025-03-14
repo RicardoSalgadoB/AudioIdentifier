@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 
-class SongClassifier{
+class AudioIdentifier{
 private:
     std::vector<bool> weights;
     std::vector<bool> neurons;
@@ -19,7 +19,7 @@ private:
     size_t hashName() const;
 
 public:
-    SongClassifier(int num_neurons = 100);
+    AudioIdentifier(int num_neurons = 100);
     
     void sculpt(const std::vector<double> &ft, int s_rate, const std::string &song_name);
     void sculpt(const std::vector<double> &ft, int s_rate, std::string &&song_name);
@@ -27,31 +27,31 @@ public:
     std::string identify(const std::vector<double> &ft, int s_rate);
 };
 
-SongClassifier::SongClassifier(int num_neurons){
+AudioIdentifier::AudioIdentifier(int num_neurons){
     song_names_table.resize(num_neurons/10);
     neurons.resize(num_neurons);
     weights.resize(num_neurons*num_neurons);
 }
 
-void SongClassifier::sculpt(const std::vector<double> &ft, int s_rate, const std::string &song_name){
+void AudioIdentifier::sculpt(const std::vector<double> &ft, int s_rate, const std::string &song_name){
     songToNeurons(ft, s_rate);
     sculpt();
     embedName(song_name);
 }
 
-void SongClassifier::sculpt(const std::vector<double> &ft, int s_rate, std::string &&song_name){
+void AudioIdentifier::sculpt(const std::vector<double> &ft, int s_rate, std::string &&song_name){
     songToNeurons(ft, s_rate);
     sculpt();
     embedName(song_name);
 }
 
-std::string SongClassifier::identify(const std::vector<double> &ft, int s_rate){
+std::string AudioIdentifier::identify(const std::vector<double> &ft, int s_rate){
     songToNeurons(ft, s_rate);
     updateNeurons();
     return recoverName();
 }
 
-void SongClassifier::songToNeurons(const std::vector<double> &ft, int s_rate){
+void AudioIdentifier::songToNeurons(const std::vector<double> &ft, int s_rate){
     double sum = 0;
     int mid_cut = 1000*ft.size()/s_rate;
     for (int i = 0; mid_cut > i; ++i){
@@ -79,7 +79,7 @@ void SongClassifier::songToNeurons(const std::vector<double> &ft, int s_rate){
     }
 }
 
-void SongClassifier::sculpt(){
+void AudioIdentifier::sculpt(){
     for (int i = 0; i < neurons.size(); ++i){
         for (int j = 0; j < neurons.size(); ++j){
             if (i != j)
@@ -88,7 +88,7 @@ void SongClassifier::sculpt(){
     }
 }
 
-void SongClassifier::updateNeurons(){
+void AudioIdentifier::updateNeurons(){
     std::vector<bool> prev;
     
     int last_resource = 0;
@@ -111,17 +111,17 @@ void SongClassifier::updateNeurons(){
     } while (neurons != prev && last_resource < 100000);
 }
 
-void SongClassifier::embedName(const std::string &song_name){
+void AudioIdentifier::embedName(const std::string &song_name){
     size_t pos = hashName();
     song_names_table[pos] = song_name;
 }
 
-std::string SongClassifier::recoverName() const{
+std::string AudioIdentifier::recoverName() const{
     size_t pos = hashName();
     return song_names_table[pos];
 }
 
-size_t SongClassifier::hashName() const{
+size_t AudioIdentifier::hashName() const{
     size_t seed = neurons.size();
     for (auto n : neurons)
         seed ^= n + 0x9e3779b9 + (seed << 6) + (seed >> 2);
