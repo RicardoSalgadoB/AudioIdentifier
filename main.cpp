@@ -31,26 +31,63 @@ std::pair<std::vector<double>, int> performFT(std::string &&filename){
     return ret_pair;
 }
 
+void sculpt(AudioIdentifier &identifier){
+    std::string file_name;
+    std::string audio_name;
+
+    std::cout << "Write the path to the MP3 file to be identified: ";
+    std::cin >> file_name;
+    std::cout << "Write the name of the audio: ";
+    std::cin >> audio_name;
+    std::cout << "Wait..." << std::endl;
+
+    std::pair<std::vector<double>, int> ret_pair = performFT("Audios/" + file_name);
+    std::vector<double> ft = ret_pair.first;
+    int s_rate = ret_pair.second;
+
+    identifier.sculpt(ft, s_rate, audio_name);
+    std::cout << audio_name << " has been embeded into the Network.\n" << std::endl;
+}
+
+void identify(AudioIdentifier &identifier){
+    std::string file_name;
+
+    std::cout << "Write the path (absolute or relative) to the MP3 file to be identified: ";
+    std::cin >> file_name;
+    std::cout << "Wait..." << std::endl;
+
+    std::pair<std::vector<double>, int> ret_pair = performFT("Audios/" + file_name);
+    std::vector<double> ft = ret_pair.first;
+    int s_rate = ret_pair.second;
+
+    std::string identified = identifier.identify(ft, s_rate);
+    std::cout << "The audio corresponding or closest to the given file is " << identified << std::endl;
+    std::cout << std::endl;
+}
+
 int main(){
     AudioIdentifier identifier;
+    bool breaker = true;
+    int option;
+    while (breaker){
+        std::cout << "Choose wisely:" << std::endl;
+        std::cout << "\t1) Embed an audio into the identifier" << std::endl;
+        std::cout << "\t2) Identify an audio" << std::endl;
+        std::cout << "\t3) QUIT" << std::endl;
+        std::cin >> option;
+        std::cout << "Okey..." << std::endl;
+        std::cout << std::endl;
 
-    std::pair<std::vector<double>, int> ret_pair1 = performFT("/Users/ricardosalgadob/Desktop/Project-SongClassifier/AudioFiles/ElVasodePaja.mp3");
-    std::vector<double> ft1 = ret_pair1.first;
-    int s_rate1 = ret_pair1.second;
-
-    identifier.sculpt(ft1, s_rate1, "El vaso de paja");
-
-    std::pair<std::vector<double>, int> ret_pair2 = performFT("/Users/ricardosalgadob/Desktop/Project-SongClassifier/AudioFiles/audio2.mp3");
-    std::vector<double> ft2 = ret_pair2.first;
-    int s_rate2 = ret_pair2.second;
-
-    identifier.sculpt(ft2, s_rate2, "Audio 2");
-
-    std::pair<std::vector<double>, int> ret_pair3 = performFT("/Users/ricardosalgadob/Desktop/Project-SongClassifier/AudioFiles/audio.mp3");
-    std::vector<double> ft3 = ret_pair3.first;
-    int s_rate3 = ret_pair3.second;
-
-    std::string x = identifier.identify(ft3, s_rate3);
-
-    std::cout << x << std::endl;
+        switch(option){
+            case 1:
+                sculpt(identifier);
+                break;
+            case 2:
+                identify(identifier);
+            break;
+            case 3:
+                breaker = false;
+                break;
+        }
+    }
 }
