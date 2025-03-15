@@ -28,7 +28,7 @@ I got the hash function for [here](https://stackoverflow.com/questions/20511347/
 ## Other Considerations
 When typing the file_name don't use spaces. And of course don't try to overflow the buffer.
 
-Put the audios to be analyzed in the Audios Folder.
+Put the audios to be analyzed in a Folder named "Audios" within this repo.
 
 As I said, I will be further updating this when I return (I won't elaborate further on the meaning of this). I am to adjust this to be able to identify songs through the microphone and I have a rough idea of how to do this.
 
